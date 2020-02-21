@@ -6,7 +6,7 @@ const User = require('../models/User');
 
 class BookController {
   async index(req, res) {
-    const { page = 1, q } = req.query;
+    const { page = 1, q, id } = req.query;
 
     const options = {
       where: {
@@ -24,6 +24,11 @@ class BookController {
         },
       ],
     };
+
+    if (id) {
+      const book = await Book.findByPk(id);
+      return res.json(book);
+    }
 
     if (q) options.where.name = { [Op.iLike]: q };
 
