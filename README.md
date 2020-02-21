@@ -11,7 +11,8 @@
 
 Doeteca is a project created by me, to facilitate the book giveaway for everyone who need. So, to participate, you ask for a specific book e await for givers. <br>
 Inspired on [Winnieteca](https://twitter.com/WinnieTeca). <br>
-Then, I decided make this conceptual backend project. Here, built on Express and using Sequelize ORM, you can send requests to ask for a book or for donate to anyone. I also used JWT token to build users sessions.
+Then, I decided make this conceptual backend project. Here, built on Express and using Sequelize ORM, you can send requests to ask for a book or for donate to anyone. I also used JWT token to build users sessions. <br>
+You can see the frontend consuming this API in [Doeteca Link](https://davigsousa.github.io/doeteca).
 
 ## Getting Started <a name = "getting_started"></a>
 
