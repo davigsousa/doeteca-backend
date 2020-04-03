@@ -16,13 +16,6 @@ module.exports = {
       allowNull: false,
       unique: true,
     },
-    twitter_username: {
-      type: Sequelize.STRING,
-    },
-    password_hash: {
-      type: Sequelize.STRING,
-      allowNull: false,
-    },
     created_at: {
       type: Sequelize.DATE,
       allowNull: false,
