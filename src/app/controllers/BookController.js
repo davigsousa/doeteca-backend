@@ -1,4 +1,4 @@
-const { Op } = require('sequelize');
+const { Op, fn } = require('sequelize');
 const Yup = require('yup');
 
 const Book = require('../models/Book');
@@ -12,7 +12,7 @@ class BookController {
       where: {
         active: true,
       },
-      order: 'random()',
+      order: [fn('RANDOM')],
       attributes: ['id', 'name', 'author', 'thumbnail', 'suggested_link'],
       limit: 18,
       offset: (page - 1) * 18,
