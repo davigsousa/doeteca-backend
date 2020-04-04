@@ -1,4 +1,4 @@
-const Yup = require('yup');
+const axios = require('axios').default;
 const jwt = require('jsonwebtoken');
 
 const authConfig = require('../../config/auth');
@@ -6,36 +6,38 @@ const User = require('../models/User');
 
 class SessionController {
   async store(req, res) {
-    const schema = Yup.object().shape({
-      email: Yup.string().email().required(),
-      password: Yup.string().required(),
-    });
+    const { facebooktoken } = req.headers;
+    const { email } = req.body;
 
-    if (!(await schema.isValid(req.body))) return res.status(400).json({ error: 'Validation fails.' });
+    if (!facebooktoken || !email) return res.status(400).json({ error: 'Validation fails.' });
 
-    const { email, password } = req.body;
+    const path = `https://graph.facebook.com/me?access_token=${facebooktoken}`;
+    try {
+      const { name } = await axios.get(path);
 
-    const user = await User.findOne({ where: { email } });
+      let user = await User.findOne({ where: { email } });
 
-    if (!user) return res.status(401).json({ error: 'User not found.' });
+      if (!user) {
+        user = await User.create({
+          name, email,
+        });
+      }
 
-    if (!(await user.checkPassword(password))) {
-      return res.status(401).json({ error: 'Password does not match.' });
+      const { id } = user;
+
+      return res.status(200).json({
+        user: {
+          id,
+          name,
+          email,
+        },
+        token: jwt.sign({ id }, authConfig.secret, {
+          expiresIn: authConfig.expiresIn,
+        }),
+      });
+    } catch (err) {
+      return res.status(403).json({ error: 'Acess Forbiden.' });
     }
-
-    const { id, name, giver } = user;
-
-    return res.status(200).json({
-      user: {
-        id,
-        name,
-        email,
-        giver,
-      },
-      token: jwt.sign({ id }, authConfig.secret, {
-        expiresIn: authConfig.expiresIn,
-      }),
-    });
   }
 }
 
