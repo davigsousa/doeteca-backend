@@ -12,7 +12,7 @@ class BookController {
       where: {
         active: true,
       },
-      order: ['created_at'],
+      order: 'random()',
       attributes: ['id', 'name', 'author', 'thumbnail', 'suggested_link'],
       limit: 18,
       offset: (page - 1) * 18,
