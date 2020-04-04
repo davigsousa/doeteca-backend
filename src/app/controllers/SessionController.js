@@ -13,7 +13,8 @@ class SessionController {
 
     const path = `https://graph.facebook.com/me?access_token=${facebooktoken}`;
     try {
-      const { name } = await axios.get(path);
+      const response = await axios.get(path);
+      const { name } = response.data;
 
       let user = await User.findOne({ where: { email } });
 

@@ -20,7 +20,7 @@ class BookController {
         {
           model: User,
           as: 'owner',
-          attributes: ['id', 'name', 'twitter_username'],
+          attributes: ['id', 'name', 'email'],
         },
       ],
     };
