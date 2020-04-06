@@ -6,16 +6,23 @@ const User = require('../models/User');
 
 class SessionController {
   async store(req, res) {
-    const { facebooktoken } = req.headers;
-    const { email } = req.body;
+    const { socialtoken } = req.headers;
+    const { by } = req.query;
+    const { name, email } = req.body;
 
-    if (!facebooktoken || !email) return res.status(400).json({ error: 'Validation fails.' });
+    if (!socialtoken || !email) return res.status(400).json({ error: 'Validation fails.' });
 
-    const path = `https://graph.facebook.com/me?access_token=${facebooktoken}`;
+    const path = by && by === 'facebook'
+      ? `https://graph.facebook.com/me?access_token=${socialtoken}`
+      : `https://www.googleapis.com/plus/v1/people/me?access_token=${socialtoken}`;
+
     try {
-      const response = await axios.get(path);
-      const { name } = response.data;
+      await axios.get(path);
+    } catch (err) {
+      return res.status(403).json({ error: 'Access Forbiden.' });
+    }
 
+    try {
       let user = await User.findOne({ where: { email } });
 
       if (!user) {
