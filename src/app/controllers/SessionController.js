@@ -14,7 +14,7 @@ class SessionController {
 
     const path = by && by === 'facebook'
       ? `https://graph.facebook.com/me?access_token=${socialtoken}`
-      : `https://www.googleapis.com/plus/v1/people/me?access_token=${socialtoken}`;
+      : `https://www.googleapis.com/oauth2/v1/userinfo?access_token=${socialtoken}`;
 
     try {
       await axios.get(path);
